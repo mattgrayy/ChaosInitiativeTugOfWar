@@ -128,4 +128,12 @@ public class BlockMove : MonoBehaviour {
             transform.position += -Vector3.right * 0.005f;
         }
     }
+
+    void OnTriggerStay2D(Collision2D other)
+    {
+        if (other.transform.tag == "Explosion")
+        {
+            rotateMe(other.contacts[0].point);
+        }
+    }
 }
