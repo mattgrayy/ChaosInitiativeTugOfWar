@@ -14,7 +14,7 @@ public class BlockMove : MonoBehaviour {
     Transform rotatePoint = null;
 
     [SerializeField]float rotatedDegrees = 0;
-    [SerializeField]float rotateModifier = 90;
+    [SerializeField]float rotateModifier = 1f;
 
     // Update is called once per frame
     void Update ()
@@ -23,7 +23,7 @@ public class BlockMove : MonoBehaviour {
         {
             if (rotatePoint == leftCorner)
             {
-                float ammount = rotateModifier + (5 * rotatedDegrees) * Time.deltaTime;
+                float ammount = (rotateModifier + (5*rotatedDegrees)) * Time.deltaTime;
 
                 if (rotatedDegrees + ammount > 90)
                 {
@@ -37,7 +37,7 @@ public class BlockMove : MonoBehaviour {
             }
             else
             {
-                float ammount = rotateModifier + (5 * rotatedDegrees) * Time.deltaTime;
+                float ammount = (rotateModifier + (5*rotatedDegrees)) * Time.deltaTime;
 
                 if (rotatedDegrees + ammount > 90)
                 {
@@ -65,6 +65,11 @@ public class BlockMove : MonoBehaviour {
                 rotateMe(hit.point);
             }
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            nudgeLeft();
+        }
     }
 
     public void rotateMe(Vector2 contactPoint)
@@ -75,7 +80,7 @@ public class BlockMove : MonoBehaviour {
             float distLeft = Vector2.Distance(contactPoint, leftCorner.position);
             float distRight = Vector2.Distance(contactPoint, rightCorner.position);
 
-            if (distLeft < distRight)
+            if (distLeft > distRight)
             {
                 rotatePoint = leftCorner;
             }
@@ -105,6 +110,30 @@ public class BlockMove : MonoBehaviour {
             rightCorner.position = rightNext.position;
             rightNext.position = leftNext.position;
             leftNext.position = prevLeftPos;
+        }
+    }
+
+    void nudgeLeft()
+    {
+        if (!rotating)
+        {
+            transform.position += -Vector3.right * 0.005f;
+        }
+    }
+
+    void nudgeRight()
+    {
+        if (!rotating)
+        {
+            transform.position += -Vector3.right * 0.005f;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.tag == "Explosion")
+        {
+            rotateMe(other.transform.position);
         }
     }
 }
