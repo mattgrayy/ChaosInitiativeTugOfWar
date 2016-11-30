@@ -14,7 +14,7 @@ public class BlockMove : MonoBehaviour {
     Transform rotatePoint = null;
 
     [SerializeField]float rotatedDegrees = 0;
-    [SerializeField]float rotateModifier = 90;
+    [SerializeField]float rotateModifier = 1f;
 
     // Update is called once per frame
     void Update ()
@@ -23,7 +23,7 @@ public class BlockMove : MonoBehaviour {
         {
             if (rotatePoint == leftCorner)
             {
-                float ammount = rotateModifier + (5 * rotatedDegrees) * Time.deltaTime;
+                float ammount = (rotateModifier + (5*rotatedDegrees)) * Time.deltaTime;
 
                 if (rotatedDegrees + ammount > 90)
                 {
@@ -37,7 +37,7 @@ public class BlockMove : MonoBehaviour {
             }
             else
             {
-                float ammount = rotateModifier + (5 * rotatedDegrees) * Time.deltaTime;
+                float ammount = (rotateModifier + (5*rotatedDegrees)) * Time.deltaTime;
 
                 if (rotatedDegrees + ammount > 90)
                 {
@@ -64,6 +64,11 @@ public class BlockMove : MonoBehaviour {
             {
                 rotateMe(hit.point);
             }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            nudgeLeft();
         }
     }
 
@@ -105,6 +110,22 @@ public class BlockMove : MonoBehaviour {
             rightCorner.position = rightNext.position;
             rightNext.position = leftNext.position;
             leftNext.position = prevLeftPos;
+        }
+    }
+
+    void nudgeLeft()
+    {
+        if (!rotating)
+        {
+            transform.position += -Vector3.right * 0.005f;
+        }
+    }
+
+    void nudgeRight()
+    {
+        if (!rotating)
+        {
+            transform.position += -Vector3.right * 0.005f;
         }
     }
 }
