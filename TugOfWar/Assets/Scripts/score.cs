@@ -6,7 +6,7 @@ public class score : MonoBehaviour {
     //[SerializeField] private
     public  int Score = 0;
     public Text ScoreText;
-   public CameraShake CS;
+  
 	// Use this for initialization
 	void Start () {
         
@@ -23,7 +23,7 @@ public class score : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            CS.ShakeCamera(0.1f,0.1f);
+            
          //Application.LoadLevel(1);
 
         }
