@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pickup : MonoBehaviour {
-
+public class Explosion : MonoBehaviour {
+	float timer;
 	// Use this for initialization
 	void Start () {
-	
+		timer = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-	void OnTriggerEnter2D(Collider2D col)
-	{
-		if (col.gameObject.tag == "Player") 
-		{
+		timer += Time.deltaTime;
+		if (timer >= 1f) {
 			Destroy (gameObject);
-
 		}
+
 	}
 }

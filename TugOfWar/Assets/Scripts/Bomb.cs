@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Bomb : MonoBehaviour {
 	float timer;
+	[SerializeField] Transform explosion;
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +14,9 @@ public class Bomb : MonoBehaviour {
 	void Update () {
 		timer += Time.deltaTime;
 		if (timer >= 3f) {
+			Instantiate (explosion, transform.position, explosion.rotation);
 			Destroy (gameObject);
+
 		}
 	}
 }

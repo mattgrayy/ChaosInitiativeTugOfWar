@@ -80,7 +80,7 @@ public class BlockMove : MonoBehaviour {
             float distLeft = Vector2.Distance(contactPoint, leftCorner.position);
             float distRight = Vector2.Distance(contactPoint, rightCorner.position);
 
-            if (distLeft < distRight)
+            if (distLeft > distRight)
             {
                 rotatePoint = leftCorner;
             }
@@ -129,11 +129,11 @@ public class BlockMove : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.tag == "Explosion")
         {
-            rotateMe(other.contacts[0].point);
+            rotateMe(other.transform.position);
         }
     }
 }
