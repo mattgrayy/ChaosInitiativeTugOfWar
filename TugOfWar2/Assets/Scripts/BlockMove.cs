@@ -9,12 +9,17 @@ public class BlockMove : MonoBehaviour {
     [SerializeField] Transform leftNext;
     [SerializeField] Transform rightNext;
 
-    bool rotating = false;
+    public bool rotating = false;
     [SerializeField]
     Transform rotatePoint = null;
 
     [SerializeField]float rotatedDegrees = 0;
     [SerializeField]float rotateModifier = 1f;
+
+    public CameraShake CS;
+    public AudioSource soundTip, SoundPush;
+
+    public LevelManager lvlMan;
 
     // Update is called once per frame
     void Update ()
@@ -52,6 +57,8 @@ public class BlockMove : MonoBehaviour {
 
             if (rotatedDegrees >= 90)
             {
+                soundTip.Play();
+                CS.ShakeCamera(0.1f, 0.1f);
                 resetRotPoints();
                 rotating = false;
             }
@@ -83,10 +90,12 @@ public class BlockMove : MonoBehaviour {
             if (distLeft > distRight)
             {
                 rotatePoint = leftCorner;
+                lvlMan.AddScore(10, 2);
             }
             else
             {
                 rotatePoint = rightCorner;
+                lvlMan.AddScore(10, 1);
             }
             rotatedDegrees = 0;
             rotating = true;
@@ -113,19 +122,21 @@ public class BlockMove : MonoBehaviour {
         }
     }
 
-    void nudgeLeft()
+    public void nudgeLeft()
     {
         if (!rotating)
         {
+            SoundPush.Play();
             transform.position += -Vector3.right * 0.005f;
         }
     }
 
-    void nudgeRight()
+    public void nudgeRight()
     {
         if (!rotating)
         {
-            transform.position += -Vector3.right * 0.005f;
+            SoundPush.Play();
+            transform.position += Vector3.right * 0.005f;
         }
     }
 

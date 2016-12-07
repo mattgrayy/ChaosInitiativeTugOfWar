@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
     public bool On, Off;
     
 
-    public GameObject thing;
+    
 
     //spawn points
     public Vector2 Spawn1 = new Vector2(-0.933f, -0.518f);
@@ -22,10 +22,13 @@ public class LevelManager : MonoBehaviour
     public bool GameOver;
 
     //ref to the 2 bombs
-    //player1bomb
-    //player2bomb
-    //pickUp1
-    //PickUp2
+    public GameObject elBomb;
+    public GameObject elPickUp;
+
+
+
+    public GameObject Player1, Player2, Cube;
+
 
     //player refs
 
@@ -37,6 +40,9 @@ public class LevelManager : MonoBehaviour
     public Text Score2Text;
     public Text Score1Text;
     // Use this for initialization
+
+
+    public AudioSource sound;
 
     private float timer;
 
@@ -94,8 +100,8 @@ public class LevelManager : MonoBehaviour
         {
 
             //kill the players
-            
 
+            sound.Play();
             cover.CrossFadeAlpha(1, 1f, false);
             StartText.CrossFadeAlpha(1, 1f, false);
 
@@ -156,8 +162,11 @@ public class LevelManager : MonoBehaviour
         
         //when start is pressed remove start text
         //if ! startYN
-        if (Input.GetButtonDown("Start"))
+        if (Input.GetButtonDown("Start") && !StartYN)
         {
+
+            player1sco = 0;
+            player2sco = 0;
 
             //remove black cover
             cover.CrossFadeAlpha(0, 1f, false);
@@ -169,8 +178,11 @@ public class LevelManager : MonoBehaviour
 
             //spawn players
             //activate player and change locations to playerspawn
-
-
+            Player1.GetComponent<Player1>().isDead = true;
+            Player2.GetComponent<Player2>().isDead = true;
+            Cube.transform.position = new Vector2(0, -0.414f);
+            Player1.transform.position = new Vector2(-1.1f, -0.3f);
+            Player2.transform.position = new Vector2(1.1f, -0.3f);
         }
 
         if (StartYN)
@@ -188,26 +200,18 @@ public class LevelManager : MonoBehaviour
             if (Timer <= 0)
             {
 
-                //deactivate any alive bombs and reactivate pickUps at the spawn locations
-                //if (bomb1 || bomb2) are alive
-                //kill them
-
-                //set the position of pickiups to sapwns 
-                //if any are deactive activate
-
-               
-
-
-
+                Instantiate(elPickUp, Spawn1, Quaternion.identity);
+                Instantiate(elPickUp, Spawn2, Quaternion.identity);
+                Timer = 10f;
             }
 
         }
 
         //player1sco++;
-        //Score1Text.text = player1sco.ToString();
+        Score1Text.text = player1sco.ToString();
 
         //player2sco += 5;
-        //Score2Text.text = player2sco.ToString();
+        Score2Text.text = player2sco.ToString();
 
 
 

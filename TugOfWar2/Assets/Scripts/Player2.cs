@@ -1,31 +1,150 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player2 : MonoBehaviour {
+public class Player2 : MonoBehaviour
+{
+    [SerializeField]
+    Transform bomb;
+    public BlockMove block;
+    public bool hasBomb, isDead, onGround, nudging;
+    float deathTimer;
+    public SpriteRenderer renderer, bombRenderer;
+    public Rigidbody2D rb2d;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        transform.Translate(Vector3.right * Input.GetAxis("Horizontal_1") / 10);
+    public LevelManager lvlMan;
 
-        if ((Input.GetAxis("Vertical_1") > 0) && (Input.GetButtonDown("NES B_1")))
+    public AudioSource sound;
+
+
+    // Use this for initialization
+    void Start()
+    {
+        nudging = false;
+        hasBomb = false;
+        isDead = false;
+        renderer = GetComponent<SpriteRenderer>();
+        rb2d = GetComponent<Rigidbody2D>();
+        deathTimer = 0F;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (isDead == true)
         {
-            //Throw bomb
-            transform.Translate(Vector3.right / 10);
+            deathTimer += Time.deltaTime;
+            if (deathTimer >= 4f)
+            {
+                renderer.enabled = true;
+                //collider2D.enabled = true;
+
+
+                isDead = false;
+            }
         }
-        else if (Input.GetButtonDown("NES B_1"))
+
+        if (isDead == false)
         {
-            //place bomb
-            transform.Translate(Vector3.up / 10);
+            transform.Translate(Vector3.right * Input.GetAxis("Horizontal_1") / 100);
+
+            if ((Input.GetAxis("Vertical_1") > 0) && (Input.GetButtonDown("NES B_1")) && (hasBomb == true))
+            {
+                //Throw bomb
+                bombRenderer.enabled = false;
+                Transform clone = Instantiate(bomb, transform.position, transform.rotation) as Transform;
+                Vector2 Direction = -clone.transform.right + (clone.transform.up) * 2;
+                clone.GetComponent<Rigidbody2D>().AddForce((Direction) * 80);
+                hasBomb = false;
+            }
+            else if ((Input.GetButtonDown("NES B_1")) && (hasBomb == true))
+            {
+                //place bomb
+                bombRenderer.enabled = false;
+                Instantiate(bomb, transform.position, bomb.rotation);
+                hasBomb = false;
+            }
+            if (Input.GetButtonDown("NES A_1"))
+            {
+                //nudge
+
+                if (nudging)
+                {
+                    block.nudgeLeft();
+                    lvlMan.AddScore(1,2);
+                }
+                else if(onGround)
+                {
+                    rb2d.AddForce(Vector2.up * 10f);
+                    onGround = false;
+                }
+            }
         }
-        if (Input.GetButtonDown("NES A_1"))
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "pickup")
         {
-            //nudge
-            transform.Translate(Vector3.down / 10);
+            sound.Play();
+            hasBomb = true;
+            bombRenderer.enabled = true;
         }
+
+        if (col.gameObject.tag == "Explosion")
+        {
+            PlayerDeath();
+        }
+
+        if (col.gameObject.tag == "Nudge_Area")
+        {
+            nudging = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Explosion")
+        {
+            PlayerDeath();
+        }
+    }
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Nudge_Area")
+        {
+            nudging = false;
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground")
+        {
+            onGround = true;
+        }
+        if (col.gameObject.tag == "Block" && (col.transform.GetComponent<BlockMove>().rotating))
+        {
+            PlayerDeath();
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground")
+        {
+            onGround = false;
+        }
+    }
+
+    void PlayerDeath()
+    {
+        lvlMan.AddScore(5, 1);
+        isDead = true;
+        renderer.enabled = false;
+        bombRenderer.enabled = false;
+        hasBomb = false;
+        deathTimer = 0f;
+        transform.position = new Vector2(1.1f, -0.3f);
     }
 }

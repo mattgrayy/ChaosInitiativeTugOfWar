@@ -4,6 +4,8 @@ using System.Collections;
 public class Bomb : MonoBehaviour {
 	float timer;
 	[SerializeField] Transform explosion;
+    public GameObject pickup;
+    public Vector2 spawn;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +17,8 @@ public class Bomb : MonoBehaviour {
 		timer += Time.deltaTime;
 		if (timer >= 3f) {
 			Instantiate (explosion, transform.position, explosion.rotation);
-			Destroy (gameObject);
+            Instantiate(pickup, spawn, Quaternion.identity);
+            Destroy (gameObject);
 
 		}
 	}

@@ -11,7 +11,11 @@ public class Explosion : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		timer += Time.deltaTime;
-		if (timer >= 1f) {
+        if (timer >= 0.3f && GetComponent<Collider2D>().enabled)
+        {
+            GetComponent<Collider2D>().enabled = false;
+        }
+        if (timer >= 1f) {
 			Destroy (gameObject);
 		}
 

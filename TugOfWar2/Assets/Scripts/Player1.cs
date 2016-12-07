@@ -3,19 +3,24 @@ using System.Collections;
 
 public class Player1 : MonoBehaviour {
 	[SerializeField] Transform bomb;
-	public bool hasBomb, isDead, onGround;
+    public BlockMove block;
+	public bool hasBomb, isDead, onGround, nudging;
 	float deathTimer;
-	public SpriteRenderer renderer;
-	public BoxCollider2D collider2D;
+	public SpriteRenderer renderer, bombRenderer;
 	public Rigidbody2D rb2d;
 
-	// Use this for initialization
-	void Start () {
+    public LevelManager lvlMan;
+
+    public AudioSource sound;
+
+    // Use this for initialization
+    void Start () {
+        nudging = false;
 		hasBomb = false;
 		isDead = false;
 		renderer = GetComponent<SpriteRenderer> ();
-		collider2D = GetComponent<BoxCollider2D> ();
 		rb2d = GetComponent<Rigidbody2D> ();
+        deathTimer = 0F;
 	}
 	
 	// Update is called once per frame
@@ -36,33 +41,51 @@ public class Player1 : MonoBehaviour {
 			transform.Translate (Vector3.right * Input.GetAxis ("Horizontal_0") / 100);
 
 			if ((Input.GetAxis ("Vertical_0") > 0) && (Input.GetButtonDown ("NES B_0")) && (hasBomb == true)) {
-				//Throw bomb
-				Transform clone = Instantiate (bomb, transform.position, transform.rotation) as Transform;
+                //Throw bomb
+                bombRenderer.enabled = false;
+                Transform clone = Instantiate (bomb, transform.position, transform.rotation) as Transform;
 				Vector2 Direction = clone.transform.right + (clone.transform.up)*2;
 				clone.GetComponent<Rigidbody2D> ().AddForce ((Direction) * 80);
 				hasBomb = false;
 			} else if ((Input.GetButtonDown ("NES B_0")) && (hasBomb == true)) {
                 //place bomb
-				Instantiate (bomb, transform.position, bomb.rotation);
+                bombRenderer.enabled = false;
+                Instantiate (bomb, transform.position, bomb.rotation);
 				hasBomb = false;
 			}
 			if (Input.GetButtonDown ("NES A_0")) {
-				//nudge
+                //nudge
 
-				rb2d.AddForce(Vector2.up * 10f);
-			}
+                if (nudging)
+                {
+                    block.nudgeRight();
+                    lvlMan.AddScore(1, 1);
+                }
+                else if (onGround)
+                {
+                    rb2d.AddForce(Vector2.up * 10f);
+                    onGround = false;
+                }
+            }
 		}
     }
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		if (col.gameObject.tag == "pickup") {
+            sound.Play();
 			hasBomb = true;
+            bombRenderer.enabled = true;
 		}
 
 		if (col.gameObject.tag == "Explosion") {
 			PlayerDeath ();
 		}
+
+        if (col.gameObject.tag == "Nudge_Area")
+        {
+            nudging = true;
+        }
 	}
 
 	void OnTriggerStay2D(Collider2D col)
@@ -71,13 +94,24 @@ public class Player1 : MonoBehaviour {
 			PlayerDeath ();
 		}
 	}
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Nudge_Area")
+        {
+            nudging = false;
+        }
+    }
 
-	void OnCollisionEnter2D(Collision2D col)
+    void OnCollisionStay2D(Collision2D col)
 	{
 		if (col.gameObject.tag == "Ground") {
 			onGround = true;
 		}
-	}
+        if (col.gameObject.tag == "Block" && (col.transform.GetComponent<BlockMove>().rotating))
+        {
+            PlayerDeath();
+        }
+    }
 
 	void OnCollisionExit2D(Collision2D col)
 	{
@@ -88,11 +122,12 @@ public class Player1 : MonoBehaviour {
 
 	void PlayerDeath()
 	{
-		isDead = true;
+        lvlMan.AddScore(5, 2);
+        isDead = true;
 		renderer.enabled = false;
-		//collider2D.enabled = false;
-		hasBomb = false;
+        bombRenderer.enabled = false;
+        hasBomb = false;
 		deathTimer = 0f;
-		transform.position = new Vector2 (-0.7f, -0.3f);
+		transform.position = new Vector2 (-1.1f, -0.3f);
 	}
 }
