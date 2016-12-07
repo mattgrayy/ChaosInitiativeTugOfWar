@@ -4,7 +4,7 @@ using System.Collections;
 public class Player2 : MonoBehaviour
 {
     [SerializeField]
-    Transform bomb;
+    Transform bomb, squash;
     public BlockMove block;
     public bool hasBomb, isDead, onGround, nudging;
     float deathTimer;
@@ -25,6 +25,7 @@ public class Player2 : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
         deathTimer = 0F;
+        
     }
 
     // Update is called once per frame
@@ -37,6 +38,11 @@ public class Player2 : MonoBehaviour
             if (deathTimer >= 4f)
             {
                 renderer.enabled = true;
+                if (hasBomb)
+                {
+                    bombRenderer.enabled = true;
+
+                }
                 //collider2D.enabled = true;
 
 
@@ -88,7 +94,10 @@ public class Player2 : MonoBehaviour
         {
             sound.Play();
             hasBomb = true;
+            if (!isDead)
+            { 
             bombRenderer.enabled = true;
+            }
         }
 
         if (col.gameObject.tag == "Explosion")
@@ -125,6 +134,7 @@ public class Player2 : MonoBehaviour
         }
         if (col.gameObject.tag == "Block" && (col.transform.GetComponent<BlockMove>().rotating))
         {
+            Instantiate(squash, transform.position, transform.rotation);
             PlayerDeath();
         }
     }
@@ -139,6 +149,12 @@ public class Player2 : MonoBehaviour
 
     void PlayerDeath()
     {
+        if (hasBomb)
+        {
+            GameObject b = Instantiate(bomb, new Vector2(1000000000000, 1000000000000), bomb.rotation) as GameObject;
+            
+        }
+                
         lvlMan.AddScore(5, 1);
         isDead = true;
         renderer.enabled = false;

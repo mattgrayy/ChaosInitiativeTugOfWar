@@ -127,7 +127,7 @@ public class BlockMove : MonoBehaviour {
         if (!rotating)
         {
             SoundPush.Play();
-            transform.position += -Vector3.right * 0.005f;
+            transform.position += -Vector3.right * 0.01f;
         }
     }
 
@@ -136,7 +136,7 @@ public class BlockMove : MonoBehaviour {
         if (!rotating)
         {
             SoundPush.Play();
-            transform.position += Vector3.right * 0.005f;
+            transform.position += Vector3.right * 0.01f;
         }
     }
 

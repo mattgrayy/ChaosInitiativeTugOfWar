@@ -12,11 +12,11 @@ public class winTrigger : MonoBehaviour {
         {
             if (right)
             {
-                lvlMan.AddScore(100,1);
+                lvlMan.AddScore(500,1);
             }
             else
             {
-                lvlMan.AddScore(100, 2);
+                lvlMan.AddScore(500, 2);
             }
             lvlMan.GameOver = true;
         }

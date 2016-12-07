@@ -17,8 +17,8 @@ public class LevelManager : MonoBehaviour
     
 
     //spawn points
-    public Vector2 Spawn1 = new Vector2(-0.933f, -0.518f);
-    public Vector2 Spawn2 = new Vector2(0.959f, -0.518f);
+    private Vector2 Spawn1 = new Vector2(-0.9386668f, -0.5448409f);
+    private Vector2 Spawn2 = new Vector2(0.949f, -0.5448409f);
     public bool GameOver;
 
     //ref to the 2 bombs
@@ -62,6 +62,9 @@ public class LevelManager : MonoBehaviour
 
         Score1Text.text = "0";
         Score2Text.text = "0";
+
+        Instantiate(elPickUp, Spawn1, Quaternion.identity);
+        Instantiate(elPickUp, Spawn2, Quaternion.identity);
 
     }
 
@@ -185,27 +188,7 @@ public class LevelManager : MonoBehaviour
             Player2.transform.position = new Vector2(1.1f, -0.3f);
         }
 
-        if (StartYN)
-        {
-
-            //play game
-
-
-
-            //spawn bomb on a timer
-            Timer -= 1 * Time.deltaTime;
-
-
-            //if timer == 0
-            if (Timer <= 0)
-            {
-
-                Instantiate(elPickUp, Spawn1, Quaternion.identity);
-                Instantiate(elPickUp, Spawn2, Quaternion.identity);
-                Timer = 10f;
-            }
-
-        }
+       
 
         //player1sco++;
         Score1Text.text = player1sco.ToString();

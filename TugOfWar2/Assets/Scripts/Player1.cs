@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Player1 : MonoBehaviour {
-	[SerializeField] Transform bomb;
+	[SerializeField] Transform bomb, squash;
     public BlockMove block;
 	public bool hasBomb, isDead, onGround, nudging;
 	float deathTimer;
@@ -12,6 +12,7 @@ public class Player1 : MonoBehaviour {
     public LevelManager lvlMan;
 
     public AudioSource sound;
+    
 
     // Use this for initialization
     void Start () {
@@ -30,10 +31,15 @@ public class Player1 : MonoBehaviour {
 			deathTimer += Time.deltaTime;
 			if (deathTimer >= 4f) {
 				renderer.enabled = true;
-				//collider2D.enabled = true;
+                if (hasBomb)
+                {
+                    bombRenderer.enabled = true;
+
+                }
+                //collider2D.enabled = true;
 
 
-				isDead = false;
+                isDead = false;
 			}
 		}
 
@@ -75,8 +81,12 @@ public class Player1 : MonoBehaviour {
 		if (col.gameObject.tag == "pickup") {
             sound.Play();
 			hasBomb = true;
-            bombRenderer.enabled = true;
-		}
+            
+            if (!isDead)
+            {
+                bombRenderer.enabled = true;
+            }
+        }
 
 		if (col.gameObject.tag == "Explosion") {
 			PlayerDeath ();
@@ -109,6 +119,7 @@ public class Player1 : MonoBehaviour {
 		}
         if (col.gameObject.tag == "Block" && (col.transform.GetComponent<BlockMove>().rotating))
         {
+            Instantiate(squash, transform.position, transform.rotation);
             PlayerDeath();
         }
     }
@@ -122,6 +133,13 @@ public class Player1 : MonoBehaviour {
 
 	void PlayerDeath()
 	{
+
+        if (hasBomb)
+        {
+            GameObject b = Instantiate(bomb, new Vector2(1000000000000, 1000000000000), bomb.rotation) as GameObject;
+
+        }
+
         lvlMan.AddScore(5, 2);
         isDead = true;
 		renderer.enabled = false;
