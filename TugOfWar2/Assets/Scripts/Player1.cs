@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class Player1 : MonoBehaviour {
-	[SerializeField] Transform bomb, squash;
+
+
+	[SerializeField] Transform bomb, squash, dud;
     public BlockMove block;
 	public bool hasBomb, isDead, onGround, nudging;
 	float deathTimer;
@@ -15,21 +17,25 @@ public class Player1 : MonoBehaviour {
     
 
     // Use this for initialization
-    void Start () {
+    void Start() 
+	{
         nudging = false;
 		hasBomb = false;
 		isDead = false;
-		renderer = GetComponent<SpriteRenderer> ();
-		rb2d = GetComponent<Rigidbody2D> ();
+		renderer = GetComponent<SpriteRenderer>();
+		rb2d = GetComponent<Rigidbody2D>();
         deathTimer = 0F;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() 
+	{
 
-		if (isDead == true) {
+		if (isDead == true)
+		{
 			deathTimer += Time.deltaTime;
-			if (deathTimer >= 4f) {
+			if (deathTimer >= 4f)
+			{
 				renderer.enabled = true;
                 if (hasBomb)
                 {
@@ -43,23 +49,28 @@ public class Player1 : MonoBehaviour {
 			}
 		}
 
-		if (isDead == false) {
-			transform.Translate (Vector3.right * Input.GetAxis ("Horizontal_0") / 100);
+		if (isDead == false)
+		{
+			transform.Translate(Vector3.right * Input.GetAxis ("Horizontal_0") / 100);
 
-			if ((Input.GetAxis ("Vertical_0") > 0) && (Input.GetButtonDown ("NES B_0")) && (hasBomb == true)) {
+			if ((Input.GetAxis("Vertical_0") > 0) && (Input.GetButtonDown ("NES B_0")) && (hasBomb == true))
+			{
                 //Throw bomb
                 bombRenderer.enabled = false;
                 Transform clone = Instantiate (bomb, transform.position, transform.rotation) as Transform;
 				Vector2 Direction = clone.transform.right + (clone.transform.up)*2;
 				clone.GetComponent<Rigidbody2D> ().AddForce ((Direction) * 80);
 				hasBomb = false;
-			} else if ((Input.GetButtonDown ("NES B_0")) && (hasBomb == true)) {
+			} 
+			else if ((Input.GetButtonDown("NES B_0")) && (hasBomb == true))
+			{
                 //place bomb
                 bombRenderer.enabled = false;
                 Instantiate (bomb, transform.position, bomb.rotation);
 				hasBomb = false;
 			}
-			if (Input.GetButtonDown ("NES A_0")) {
+			if (Input.GetButtonDown("NES A_0"))
+			{
                 //nudge
 
                 if (nudging)
@@ -67,7 +78,7 @@ public class Player1 : MonoBehaviour {
                     block.nudgeRight();
                     lvlMan.AddScore(1, 1);
                 }
-                else if (onGround)
+                else if(onGround)
                 {
                     rb2d.AddForce(Vector2.up * 10f);
                     onGround = false;
@@ -78,7 +89,8 @@ public class Player1 : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if (col.gameObject.tag == "pickup") {
+		if (col.gameObject.tag == "pickup")
+		{
             sound.Play();
 			hasBomb = true;
             
@@ -88,8 +100,9 @@ public class Player1 : MonoBehaviour {
             }
         }
 
-		if (col.gameObject.tag == "Explosion") {
-			PlayerDeath ();
+		if (col.gameObject.tag == "Explosion")
+		{
+			PlayerDeath();
 		}
 
         if (col.gameObject.tag == "Nudge_Area")
@@ -100,8 +113,9 @@ public class Player1 : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D col)
 	{
-		if (col.gameObject.tag == "Explosion") {
-			PlayerDeath ();
+		if (col.gameObject.tag == "Explosion")
+		{
+			PlayerDeath();
 		}
 	}
     void OnTriggerExit2D(Collider2D col)
@@ -114,7 +128,8 @@ public class Player1 : MonoBehaviour {
 
     void OnCollisionStay2D(Collision2D col)
 	{
-		if (col.gameObject.tag == "Ground") {
+		if (col.gameObject.tag == "Ground")
+		{
 			onGround = true;
 		}
         if (col.gameObject.tag == "Block" && (col.transform.GetComponent<BlockMove>().rotating))
@@ -126,7 +141,8 @@ public class Player1 : MonoBehaviour {
 
 	void OnCollisionExit2D(Collision2D col)
 	{
-		if (col.gameObject.tag == "Ground") {
+		if (col.gameObject.tag == "Ground")
+		{
 			onGround = false;
 		}
 	}
@@ -136,7 +152,7 @@ public class Player1 : MonoBehaviour {
 
         if (hasBomb)
         {
-            GameObject b = Instantiate(bomb, new Vector2(1000000000000, 1000000000000), bomb.rotation) as GameObject;
+			GameObject b = Instantiate(dud, new Vector2(100, 100), dud.rotation) as GameObject;
 
         }
 

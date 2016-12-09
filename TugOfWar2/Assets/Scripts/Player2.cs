@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Player2 : MonoBehaviour
 {
-    [SerializeField]
-    Transform bomb, squash;
+	
+    [SerializeField] Transform bomb, squash, dud;
     public BlockMove block;
-    public bool hasBomb, isDead, onGround, nudging;
+	public bool hasBomb, isDead, onGround, nudging;
     float deathTimer;
     public SpriteRenderer renderer, bombRenderer;
     public Rigidbody2D rb2d;
@@ -25,7 +25,6 @@ public class Player2 : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
         deathTimer = 0F;
-        
     }
 
     // Update is called once per frame
@@ -94,9 +93,10 @@ public class Player2 : MonoBehaviour
         {
             sound.Play();
             hasBomb = true;
+
             if (!isDead)
             { 
-            bombRenderer.enabled = true;
+            	bombRenderer.enabled = true;
             }
         }
 
@@ -151,7 +151,7 @@ public class Player2 : MonoBehaviour
     {
         if (hasBomb)
         {
-            GameObject b = Instantiate(bomb, new Vector2(1000000000000, 1000000000000), bomb.rotation) as GameObject;
+            GameObject b = Instantiate(dud, new Vector2(100, 100), dud.rotation) as GameObject;
             
         }
                 
