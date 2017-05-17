@@ -165,27 +165,31 @@ public class LevelManager : MonoBehaviour
         
         //when start is pressed remove start text
         //if ! startYN
-        if (Input.GetButtonDown("Start") && !StartYN)
+      //  if (Input.GetButtonDown("Start") && !StartYN)
+		//arcade mappings
+		if (Input.GetButtonDown("Cab_red_P0")||Input.GetButtonDown("Cab_red_P1"))
         {
+			if (!StartYN) 
+			{
+				player1sco = 0;
+				player2sco = 0;
 
-            player1sco = 0;
-            player2sco = 0;
+				//remove black cover
+				cover.CrossFadeAlpha (0, 1f, false);
+				StartText.CrossFadeAlpha (0, 1f, false);
+				StartYN = true;
 
-            //remove black cover
-            cover.CrossFadeAlpha(0, 1f, false);
-            StartText.CrossFadeAlpha(0, 1f, false);
-            StartYN = true;
+				Score1Text.CrossFadeAlpha (1, 1f, false);
+				Score2Text.CrossFadeAlpha (1, 1f, false);
 
-            Score1Text.CrossFadeAlpha(1, 1f, false);
-            Score2Text.CrossFadeAlpha(1, 1f, false);
-
-            //spawn players
-            //activate player and change locations to playerspawn
-            Player1.GetComponent<Player1>().isDead = true;
-            Player2.GetComponent<Player2>().isDead = true;
-            Cube.transform.position = new Vector2(0, -0.414f);
-            Player1.transform.position = new Vector2(-1.1f, -0.3f);
-            Player2.transform.position = new Vector2(1.1f, -0.3f);
+				//spawn players
+				//activate player and change locations to playerspawn
+				Player1.GetComponent<Player1> ().isDead = true;
+				Player2.GetComponent<Player2> ().isDead = true;
+				Cube.transform.position = new Vector2 (0, -0.414f);
+				Player1.transform.position = new Vector2 (-1.1f, -0.3f);
+				Player2.transform.position = new Vector2 (1.1f, -0.3f);
+			}
         }
 
        
