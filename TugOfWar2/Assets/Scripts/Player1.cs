@@ -159,9 +159,10 @@ public class Player1 : MonoBehaviour {
 
         if (hasBomb)
         {
-			GameObject b = Instantiate(dud, new Vector2(100, 100), dud.rotation) as GameObject;
-
+            GameObject a = Instantiate(dud, new Vector2(100, 100), dud.rotation) as GameObject;
         }
+
+    
 
         lvlMan.AddScore(5, 2);
         isDead = true;

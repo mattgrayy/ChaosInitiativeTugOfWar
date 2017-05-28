@@ -157,10 +157,13 @@ public class Player2 : MonoBehaviour
     {
         if (hasBomb)
         {
-            GameObject b = Instantiate(dud, new Vector2(100, 100), dud.rotation) as GameObject;
-            
+          
+            GameObject b = Instantiate(dud, new Vector2(0.96f, -0.5f), dud.rotation) as GameObject;
+            Debug.Log("p2 dead bomb");
+
         }
-                
+
+
         lvlMan.AddScore(5, 1);
         isDead = true;
         renderer.enabled = false;

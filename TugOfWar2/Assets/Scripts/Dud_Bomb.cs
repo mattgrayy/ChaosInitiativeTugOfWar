@@ -18,9 +18,10 @@ public class Dud_Bomb : MonoBehaviour {
 	void Update () {
 		timer += Time.deltaTime;
 		if (timer >= 3f) {
-			
-			Instantiate(pickup, spawn, Quaternion.identity);
-			Destroy (gameObject);
+
+           
+            Instantiate(pickup, spawn, Quaternion.identity);
+            Destroy (gameObject);
 
 		}
 	}
