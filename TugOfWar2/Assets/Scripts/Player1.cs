@@ -53,10 +53,10 @@ public class Player1 : MonoBehaviour {
 		{
 			transform.Translate(Vector3.right * Input.GetAxis ("Horizontal_0") / 100);
 
-			//if ((Input.GetAxis("Vertical_0") > 0) && (Input.GetButtonDown ("NES B_0")) && (hasBomb == true))
-
-			//arcade booth mapping
-			if ((Input.GetAxis("Vertical_0") > 0) && (Input.GetButtonDown("Cab_white_P0"))&& (hasBomb == true))
+            //if ((Input.GetAxis("Vertical_0") > 0) && (Input.GetButtonDown ("NES B_0")) && (hasBomb == true))
+        
+            //arcade booth mapping
+            if ((Input.GetAxis("Vertical_0") > 0) && (Input.GetButtonDown("Cab_red_P0")) && (hasBomb == true))
 			{
                 //Throw bomb
                 bombRenderer.enabled = false;
@@ -67,7 +67,7 @@ public class Player1 : MonoBehaviour {
 			} 
 			//else if ((Input.GetButtonDown("NES B_0")) && (hasBomb == true))
 				//arcade booth mapping
-			else if (Input.GetButtonDown("Cab_white_P0")&& (hasBomb == true))
+			else if (Input.GetButtonDown("Cab_red_P0") && (hasBomb == true))
 			{
                 //place bomb
                 bombRenderer.enabled = false;
@@ -76,7 +76,7 @@ public class Player1 : MonoBehaviour {
 			}
 			//if (Input.GetButtonDown("NES A_0"))
 				//arcade booth mapping
-			if (Input.GetButtonDown("Cab_red_P0"))
+			if (Input.GetButtonDown("Cab_white_P0"))
 			{
                 //nudge
 
